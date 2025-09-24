@@ -1,5 +1,5 @@
 export const useSidebar = () => {
-  const isOpen = useState('sidebar.isOpen', () => true)
+  const isOpen = useState('sidebar.isOpen', () => false)
   
   const toggle = () => {
     isOpen.value = !isOpen.value
