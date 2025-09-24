@@ -16,6 +16,7 @@
           <!-- Menu Toggle Button -->
           <button
             @click="toggle"
+            aria-label="Alternar abertura do menu"
             class="relative z-50 rounded-lg p-2 text-slate-300 transition-all duration-200 hover:bg-slate-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             :class="{ 'text-white bg-slate-800': isOpen }"
           >
@@ -138,6 +139,7 @@
             @click="toggle"
             class="rounded-lg p-1.5 text-slate-400 transition-all duration-200 hover:bg-slate-800 hover:text-white"
             :class="{ 'rotate-180': !isOpen }"
+            aria-label="Alternar abertura do menu"
           >
             <ChevronLeft class="h-5 w-5 transition-transform duration-300" />
           </button>
@@ -149,6 +151,7 @@
             <li v-for="item in menuItems" :key="item.path">
               <NuxtLink
                 :to="item.path"
+                :aria-label="`Ir para ${item.label}`"
                 class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 relative"
                 :class="isActiveRoute(item.path) ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-300 hover:bg-slate-800 hover:text-white'"
               >

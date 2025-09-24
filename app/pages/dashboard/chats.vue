@@ -49,11 +49,14 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useApi } from '~/composables/useApi'
+import { useChatOperations } from '~/composables/useChatOperations'
 import { useWebSocketChat } from '~/composables/useWebSocketChat'
 import type { Chat, Message } from '~/types/chat'
 import type { WebSocketEvent, WebSocketMessage, WebSocketPresence, WebSocketChatRead } from '~/composables/useWebSocketChat'
 import ChatSidebar from '~/components/chat/ChatSidebar/ChatSidebar.vue'
 import ChatWindow from '~/components/chat/ChatWindow/ChatWindow.vue'
+import { toast } from 'vue-sonner'
+import 'vue-sonner/style.css'
 
 definePageMeta({
   title: 'Chats',
@@ -260,7 +263,7 @@ const sendMessage = async (messageText: string) => {
     
   } catch (error) {
     console.error("Failed to send message to chat", error)
-    // TODO: ADD TOAST NOTIFICATION
+    toast.error('Erro ao enviar mensagem, por favor tente novamente.')
   }
 }
 
@@ -284,7 +287,7 @@ const markChatAsRead = async (chatId: string) => {
     })
     
   } catch (error) {
-    console.error('error', `Failed to mark chat ${chatId.slice(-6)} as read`, error)
+    console.error('error', `Failed to mark chat as read`, error)
   }
 }
 
@@ -306,6 +309,8 @@ const handleNewChat = async () => {
       connectToChat(data.chat_id),
       loadChatMessages(data.chat_id)
     ])
+
+    toast.success('Chat criado com sucesso!')
     
   } catch (error) {
     console.error('error', 'Failed to create new chat', error)

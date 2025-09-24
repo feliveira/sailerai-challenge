@@ -11,12 +11,12 @@
       :class="iconClasses"
       aria-hidden="true"
     />
-    <h3 
+    <h2 
       v-if="title" 
       class="text-lg font-medium text-gray-700 mb-2"
     >
       {{ title }}
-    </h3>
+    </h2>
     <p class="text-gray-500" :class="messageClasses">
       {{ message }}
     </p>

@@ -2,6 +2,8 @@
   <div class="min-h-screen bg-gray-50">
     <!-- Sidebar -->
     <AppSidebar />
+    <Toaster position="top-right" />
+
     
     <!-- Main Content Area -->
     <div 
@@ -39,6 +41,7 @@
 </template>
 
 <script setup lang="ts">
+import { Toaster } from 'vue-sonner'
 import AppSidebar from '~/components/dashboard/AppSidebar.vue'
 
 

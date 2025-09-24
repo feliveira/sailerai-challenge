@@ -5,13 +5,12 @@
       'bg-blue-50 border-r-4 border-r-blue-500': isSelected,
       'hover:bg-blue-25': !isSelected
     }"
-    role="listitem"
+    role="option"
     tabindex="0"
     @click="$emit('select')"
     @keydown.enter="$emit('select')"
     @keydown.space.prevent="$emit('select')"
     :aria-selected="isSelected"
-    :aria-label="`Conversa com Customer 1, última mensagem: ${chat.lastMessage}, ${chat.time}`"
   >
     <div class="flex items-start space-x-3">
       <!-- Avatar -->
@@ -41,7 +40,7 @@
         </p>
         
         <div class="flex items-center justify-between mt-2">
-          <ChatStatus :status="chat.status ?? 'offline'" :text="chat.statusText ?? 'offline'" />
+          <ChatStatus :status="chat.status ?? 'offline'" :text="chat.status ?? 'offline'" />
           
           <ChatUnreadBadge 
             v-if="chat.unreadCount" 

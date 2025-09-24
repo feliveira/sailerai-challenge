@@ -3,7 +3,6 @@
     <div 
       class="rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex-shrink-0 flex items-center justify-center"
       :class="sizeClasses"
-      :aria-label="`Avatar de ${name}`"
     >
       <User 
         class="text-white" 
@@ -13,12 +12,13 @@
     </div>
     
     <!-- Status Indicator -->
-    <div 
+    <span 
       v-if="status === 'online'"
       class="absolute bg-green-500 border-2 border-white rounded-full"
       :class="statusSizeClasses"
+      role="status"
       aria-label="Online"
-    ></div>
+    ></span>
   </div>
 </template>
 

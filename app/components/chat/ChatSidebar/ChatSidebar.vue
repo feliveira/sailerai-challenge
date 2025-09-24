@@ -11,7 +11,7 @@
       <!-- Chat List -->
       <div 
         class="divide-y divide-gray-100 overflow-y-auto h-full"
-        role="list"
+        role="listbox"
         aria-label="Conversas disponíveis"
       >
         <ChatListItem

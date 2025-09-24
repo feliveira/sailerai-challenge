@@ -1,6 +1,13 @@
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineNuxtConfig({
+  app: {
+    head: {
+      htmlAttrs: {
+        lang: 'pt-BR'
+      }
+    }
+  },
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
@@ -23,5 +30,5 @@ export default defineNuxtConfig({
     }
   },
 
-  modules: ['@nuxtjs/google-fonts']
-})
+  modules: ['@nuxtjs/google-fonts', ['vue-sonner/nuxt', { css: false }]]
+})  
