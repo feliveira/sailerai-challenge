@@ -2,16 +2,16 @@
   <div class="min-h-screen bg-gray-50">
     <!-- Sidebar -->
     <AppSidebar />
+
     <Toaster position="top-right" />
 
-    
     <!-- Main Content Area -->
-    <div 
-      class="transition-all duration-300 ease-in-out min-h-screen"
-      :class="[
-        isOpen ? 'lg:ml-64' : 'lg:ml-16',
-        'ml-0'
-      ]"
+    <div
+      class="transition-transform duration-300 ease-in-out min-h-screen"
+      :style="{
+        '--sidebar-width': isOpen ? '16rem' : '4rem'
+      }"
+      :class="['lg:ml-[var(--sidebar-width)]', 'ml-0']"
     >
       <main class="flex-1">
         <div class="px-4 py-6 lg:px-8 lg:py-8 max-w-7xl mx-auto">
@@ -19,7 +19,7 @@
         </div>
       </main>
     </div>
-    
+
     <!-- Mobile Overlay -->
     <Transition
       name="fade"

@@ -39,6 +39,7 @@
       />
 
       <ChatWindow
+        :key="selectedChat?.toString() ?? 'no-chat'"
         :selected-chat="selectedChat"
         @send-message="sendMessage"
       />
@@ -230,7 +231,6 @@ const handleNewMessage = (chatId: string, messageData: WebSocketMessage) => {
   }
 }
 
-// OK
 const handlePresenceUpdate = (chatId: string, presenceData: WebSocketPresence) => {
   chats.value = chats.value.map(chat => 
     chat.chat_id === chatId 
@@ -240,6 +240,13 @@ const handlePresenceUpdate = (chatId: string, presenceData: WebSocketPresence) =
         } 
       : chat
   )
+
+  if(selectedChat.value?.chat_id === chatId) {
+    selectedChat.value = {
+      ...selectedChat.value,
+      status: presenceData.status,
+    }
+  }
 }
 
 const handleChatRead = (chatId: string, readData: WebSocketChatRead) => {

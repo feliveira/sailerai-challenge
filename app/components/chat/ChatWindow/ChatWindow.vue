@@ -41,7 +41,7 @@ interface Emits {
   sendMessage: [message: string]
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const handleSendMessage = (message: string) => {
