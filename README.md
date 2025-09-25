@@ -88,7 +88,7 @@ A global state library like Pinia was not used to keep the project lightweight. 
 
 If I had another week, I would focus on:
 
-- Setting up automated code quality checks (ESLint, Prettier, Husky)
+- Setting up automated code quality checks (ESLint, Prettier)
 
 - Increasing unit test coverage and adding coverage reports on pull requests
 
