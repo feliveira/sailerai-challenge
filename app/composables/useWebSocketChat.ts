@@ -2,7 +2,6 @@ export interface WebSocketEvent {
   event: 'message_received' | 'presence_updated' | 'chat_read'
   data: any
 }
-
 export interface WebSocketMessage {
   id: string
   user_id: string
@@ -10,17 +9,10 @@ export interface WebSocketMessage {
   content: string
   timestamp: string
 }
-
 export interface WebSocketPresence {
   user_id: string
   status: 'online' | 'offline' | 'typing'
   last_seen: string
-}
-
-export interface WebSocketChatRead {
-  chat_id: string
-  user_id: string
-  last_read_message_id: string
 }
 
 export const useWebSocketChat = () => {
