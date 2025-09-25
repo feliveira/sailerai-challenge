@@ -1,4 +1,4 @@
-import { useApi } from '~/composables/useApi'
+import { useApi } from './useApi'
 
 export const useChatOperations = () => {
   const api = useApi()

@@ -24,81 +24,70 @@ export interface WebSocketChatRead {
 }
 
 export const useWebSocketChat = () => {
-  const connections = ref<Map<string, WebSocket>>(new Map())
-  const connectionStatus = ref<Map<string, 'connecting' | 'connected' | 'disconnected'>>(new Map())
-  const reconnectAttempts = ref<Map<string, number>>(new Map())
+  const connections = new Map<string, WebSocket>()
+  const connectionStatus = new Map<string, 'connecting' | 'connected' | 'disconnected'>()
+  const reconnectAttempts = new Map<string, number>()
+
   const maxReconnectAttempts = 5
   const baseReconnectDelay = 1000 // Start with 1 second
 
-
   const connect = (chatId: string): Promise<WebSocket> => {
     return new Promise((resolve, reject) => {
-      
       // Clean up existing connection
       disconnect(chatId)
 
       const wsUrl = `ws://localhost:8000/ws/${chatId}`
-      
       const socket = new WebSocket(wsUrl)
-      
-      connectionStatus.value.set(chatId, 'connecting')
+
+      connectionStatus.set(chatId, 'connecting')
 
       // Set a connection timeout
       const connectionTimeout = setTimeout(() => {
         socket.close()
-        connectionStatus.value.set(chatId, 'disconnected')
+        connectionStatus.set(chatId, 'disconnected')
         reject(new Error('WebSocket connection timeout'))
       }, 10000)
 
-      socket.onopen = (event) => {
+      socket.onopen = () => {
         clearTimeout(connectionTimeout)
-        
-        connectionStatus.value.set(chatId, 'connected')
-        connections.value.set(chatId, socket)
-        reconnectAttempts.value.set(chatId, 0) // Reset reconnect attempts
-        
+
+        connectionStatus.set(chatId, 'connected')
+        connections.set(chatId, socket)
+        reconnectAttempts.set(chatId, 0) // Reset reconnect attempts
+
         resolve(socket)
       }
 
       socket.onerror = (error) => {
         clearTimeout(connectionTimeout)
-        connectionStatus.value.set(chatId, 'disconnected')
+        connectionStatus.set(chatId, 'disconnected')
         reject(error)
       }
 
       socket.onclose = (event) => {
         clearTimeout(connectionTimeout)
-        
-        const closeInfo = {
-          code: event.code,
-          reason: event.reason,
-          wasClean: event.wasClean,
-          readyState: socket.readyState
-        }
-        
-        
-        
-        connectionStatus.value.set(chatId, 'disconnected')
-        connections.value.delete(chatId)
-        
+
+        connectionStatus.set(chatId, 'disconnected')
+        connections.delete(chatId)
+
         // Reconnection logic
         if (!event.wasClean && event.code !== 1000) {
-          const currentAttempts = reconnectAttempts.value.get(chatId) || 0
-          
+          const currentAttempts = reconnectAttempts.get(chatId) || 0
+
           if (currentAttempts < maxReconnectAttempts) {
             const delay = baseReconnectDelay * Math.pow(2, currentAttempts) // Exponential backoff
-            reconnectAttempts.value.set(chatId, currentAttempts + 1)
-            
-            
+            reconnectAttempts.set(chatId, currentAttempts + 1)
+
             setTimeout(() => {
-              connect(chatId).catch(error => {
+              connect(chatId).catch(() => {
+                /* ignore errors during reconnect */
               })
             }, delay)
           } else {
-            reconnectAttempts.value.delete(chatId)
+            reconnectAttempts.delete(chatId)
           }
         } else {
-          reconnectAttempts.value.delete(chatId)
+          reconnectAttempts.delete(chatId)
         }
       }
 
@@ -112,49 +101,37 @@ export const useWebSocketChat = () => {
   }
 
   const disconnect = (chatId: string) => {
-    const socket = connections.value.get(chatId)
+    const socket = connections.get(chatId)
     if (socket) {
-     
-      
       socket.close(1000, 'Intentional disconnect')
-      connections.value.delete(chatId)
-      connectionStatus.value.delete(chatId)
-      reconnectAttempts.value.delete(chatId)
+      connections.delete(chatId)
+      connectionStatus.delete(chatId)
+      reconnectAttempts.delete(chatId)
     }
   }
 
   const disconnectAll = () => {
-    
-    connections.value.forEach((socket, chatId) => {
+    connections.forEach((_, chatId) => {
       disconnect(chatId)
     })
-    
   }
 
   const getConnection = (chatId: string): WebSocket | undefined => {
-    const connection = connections.value.get(chatId)
-    return connection
+    return connections.get(chatId)
   }
 
   const getConnectionStatus = (chatId: string): string => {
-    const status = connectionStatus.value.get(chatId) || 'disconnected'
-    return status
+    return connectionStatus.get(chatId) || 'disconnected'
   }
 
   const isConnected = (chatId: string): boolean => {
-    const connected = connectionStatus.value.get(chatId) === 'connected'
-    return connected
+    return connectionStatus.get(chatId) === 'connected'
   }
 
-  // Cleanup on unmount
-  onUnmounted(() => {
-    disconnectAll()
-  })
-
   return {
-    connections: readonly(connections),
-    connectionStatus: readonly(connectionStatus),
-    reconnectAttempts: readonly(reconnectAttempts),
+    connections,
+    connectionStatus,
+    reconnectAttempts,
     connect,
     disconnect,
     disconnectAll,
